@@ -1,0 +1,19 @@
+.env
+.env.*
+!.env.example
+
+tmp/
+.tmp-*
+
+*.log
+*.db
+*.sqlite
+*.sqlite3
+
+node_modules/
+__pycache__/
+*.py[cod]
+
+# Local n8n exports may contain credential metadata or private data.
+workflows/local/
+workflow-exports/local/

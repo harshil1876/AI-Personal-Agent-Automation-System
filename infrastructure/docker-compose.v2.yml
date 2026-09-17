@@ -1,0 +1,40 @@
+name: personal-agent-v2
+
+services:
+  n8n-v2:
+    image: n8nio/n8n:latest
+    container_name: personal-agent-v2-n8n
+    restart: unless-stopped
+    ports:
+      - "5679:5678"
+    environment:
+      - N8N_HOST=localhost
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - N8N_EDITOR_BASE_URL=https://hooks.personalaios.app
+      - WEBHOOK_URL=https://hooks.personalaios.app/
+      - N8N_SECURE_COOKIE=false
+      - GENERIC_TIMEZONE=Asia/Kolkata
+      - TZ=Asia/Kolkata
+    volumes:
+      - personal_agent_v2_n8n_data:/home/node/.n8n
+
+  postgres-v2:
+    image: postgres:16-alpine
+    container_name: personal-agent-v2-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: personal_agent_v2
+      POSTGRES_USER: personal_agent_v2
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in a local .env file}
+    volumes:
+      - personal_agent_v2_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U personal_agent_v2 -d personal_agent_v2"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  personal_agent_v2_n8n_data:
+  personal_agent_v2_postgres_data:

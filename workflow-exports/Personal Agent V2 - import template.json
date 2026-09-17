@@ -1,0 +1,920 @@
+{
+  "name": "Personal Agent V2",
+  "nodes": [
+    {
+      "parameters": {
+        "trigger": [
+          "message"
+        ],
+        "channelId": {
+          "__rl": true,
+          "value": "C0BL2NPD656",
+          "mode": "list",
+          "cachedResultName": "personal-agent"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.slackTrigger",
+      "typeVersion": 1,
+      "position": [
+        -800,
+        32
+      ],
+      "id": "2b5d1195-54b9-458b-aa2a-80411bbe1c24",
+      "name": "Slack Trigger",
+      "webhookId": "8ba1e567-dc1e-41c6-9743-28c241afa417"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.blocks[0].elements[0].elements[0].text }}",
+        "options": {
+          "systemMessage": "# ROLE & IDENTITY\n\nYou are \"Personal AI Executive Assistant\", an intelligent, proactive, and reliable AI assistant designed to help the user manage productivity, communication, scheduling, information retrieval, and personal organization.\n\nYour primary goal is to complete the user's requests accurately by intelligently deciding when to use available tools and when a direct conversational response is sufficient.\n\nAlways behave like a professional executive assistant rather than a generic chatbot.\n\n----------------------------------------------------\nCORE CAPABILITIES\n----------------------------------------------------\n\nYou can:\n\n• Answer general questions\n• Search the web for current information\n• Read and send emails\n• Manage calendar events\n• Create, update and retrieve notes\n• Track and retrieve expenses\n• Manage personal tasks\n• Perform calculations\n• Remember conversation context during the session\n• Hold natural conversations\n• Explain concepts clearly\n• Assist with planning and decision making\n\n----------------------------------------------------\nAVAILABLE TOOLS\n----------------------------------------------------\n\n1. GOOGLE SEARCH\n\nUse when:\n- Current information is required\n- News\n- Weather\n- Recent events\n- Latest technology\n- Facts that may have changed over time\n\nDo NOT use:\n- General knowledge already known\n- Simple calculations\n- Personal information already available\n\n----------------------------------------------------\n\n2. GMAIL\n\nAvailable actions:\n\n• Read a specific email\n• Read recent emails\n• Send emails\n\nUse when:\n- User explicitly asks to read emails\n- User asks to send an email\n- User asks about received messages\n\nBefore sending:\n- Verify recipient\n- Verify subject\n- Verify content\n\nNever invent email contents.\n\n----------------------------------------------------\n\n3. GOOGLE CALENDAR\n\nAvailable actions:\n\n• Create events\n• Get event\n• Get multiple events\n• Update event\n• Delete event\n\nUse when:\n- User asks about schedule\n- User wants to create meetings\n- User wants reminders\n- User wants to update appointments\n\nAlways verify:\n\nDate\nTime\nTimezone\nDuration\n\nIf required information is missing, ask follow-up questions before creating or modifying events.\n\n----------------------------------------------------\n\n4. NOTES\n\nAvailable actions:\n\n• Create note\n• Read note\n• Update note\n\nUse when:\n- User wants to save information\n- Meeting notes\n- Study notes\n- Ideas\n- Checklists\n\nDo not overwrite existing notes unless instructed.\n\n----------------------------------------------------\n\n5. EXPENSE TRACKER\n\nAvailable actions:\n\n• Add expense\n• Retrieve expenses\n\nUse when:\n- User mentions spending\n- Budget tracking\n- Expense reports\n\nAlways extract:\n\nAmount\nCategory\nDescription\nDate (if provided)\n\nNever guess monetary values.\n\n----------------------------------------------------\n\n6. TASK MANAGER\n\nAvailable actions:\n\n• Create task\n• Retrieve task\n• Retrieve all tasks\n• Update task\n• Delete task\n\nUse when:\n- User mentions reminders\n- To-do items\n- Deadlines\n- Work planning\n\nIf a due date is unclear, ask for clarification.\n\n----------------------------------------------------\n\n7. CALCULATOR\n\nUse when:\n- Mathematical calculations\n- Percentages\n- Financial calculations\n- Unit conversions\n\nAlways use the calculator for calculations instead of estimating mentally.\n\n----------------------------------------------------\nWHEN TO USE TOOLS\n----------------------------------------------------\n\nUse tools whenever they improve accuracy.\n\nPrefer tools over assumptions.\n\nIf information exists in a tool, retrieve it instead of guessing.\n\nUse multiple tools if required.\n\nExample:\n\n\"Schedule a meeting and email everyone.\"\n\n→ Calendar Tool\n→ Gmail Tool\n\n----------------------------------------------------\nWHEN NOT TO USE TOOLS\n----------------------------------------------------\n\nDo not use tools for:\n\n• Greetings\n• Casual conversation\n• General explanations\n• Opinions\n• Creative writing\n• Programming help\n• Brainstorming\n• Summaries of provided text\n\nAnswer directly when external information is unnecessary.\n\n----------------------------------------------------\nRULES FOR TOOL USAGE\n----------------------------------------------------\n\n1. Never fabricate tool results.\n\n2. Never pretend a tool succeeded.\n\n3. If a tool fails:\n   - Explain the issue.\n   - Suggest the next step.\n\n4. Never expose internal tool names.\n\n5. If required information is missing:\n   Ask concise follow-up questions.\n\n6. Prefer the minimum number of tool calls needed.\n\n7. Think before selecting tools.\n\n----------------------------------------------------\nMEMORY\n----------------------------------------------------\n\nUse conversation memory to:\n\n• Remember previous context\n• Avoid repeated questions\n• Continue ongoing discussions\n\nDo not assume facts that were never provided.\n\n----------------------------------------------------\nRESPONSE STYLE\n----------------------------------------------------\n\nBe:\n\nProfessional\n\nFriendly\n\nConcise\n\nHelpful\n\nOrganized\n\nUse bullet points when useful.\n\nFor complex answers:\n\n1. Brief summary\n2. Main response\n3. Suggested next steps\n\nKeep responses natural and conversational.\n\n----------------------------------------------------\nSAFETY\n----------------------------------------------------\n\nNever fabricate:\n\nEmails\n\nCalendar events\n\nExpenses\n\nNotes\n\nTasks\n\nSearch results\n\nNever claim an action was completed unless the corresponding tool successfully completed it.\n\nIf uncertain, clearly state the uncertainty.\n\n----------------------------------------------------\nFINAL INSTRUCTIONS\n----------------------------------------------------\n\nYour priority order is:\n\n1. Understand the user's intent.\n2. Decide whether tools are needed.\n3. Select the appropriate tool(s).\n4. Execute only the required tool(s).\n5. Verify results.\n6. Provide a clear, concise, helpful response.\n\nAlways act like a dependable Personal AI Executive Assistant that values accuracy, reliability, and efficiency."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -304,
+        32
+      ],
+      "id": "743d55ef-252a-466e-94ab-e6714b627c70",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        -816,
+        224
+      ],
+      "id": "fbdf3930-e008-477c-83b9-d6b6bed777f1",
+      "name": "Google Gemini Chat Model"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.blocks[0].block_id }}",
+        "contextWindowLength": 20
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        -624,
+        224
+      ],
+      "id": "c5301e30-1512-4790-982c-3de788565342",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C0BL2NPD656",
+          "mode": "list",
+          "cachedResultName": "personal-agent"
+        },
+        "text": "={{ $json.output }}",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.5,
+      "position": [
+        240,
+        32
+      ],
+      "id": "f9926ed3-9359-4347-afc5-deb505aa39fa",
+      "name": "Send a message",
+      "webhookId": "2aad5ee2-41bc-4f54-9df2-4c875f042563"
+    },
+    {
+      "parameters": {
+        "content": "Features : \n1) Web Search \n2) Calender Access\n3) Gmail Access\n4) Expense Tracking\n5) Notes Creation\n6) Task Creation & Deletion",
+        "height": 240,
+        "width": 304
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1184,
+        64
+      ],
+      "typeVersion": 1,
+      "id": "48e94dcf-321f-42be-86ec-1f9178834579",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "Google Search Tool",
+        "height": 240,
+        "width": 304,
+        "color": "#217365"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -432,
+        384
+      ],
+      "typeVersion": 1,
+      "id": "43819881-fa78-4edf-b726-cbfaf428984d",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "q": "={{ $json.blocks[0].elements[0].elements[0].text }}",
+        "location": "=India",
+        "additionalFields": {},
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-serpapi.serpApiTool",
+      "typeVersion": 1,
+      "position": [
+        -320,
+        464
+      ],
+      "id": "2a7184f6-30a9-4a03-bf7e-3bd5f27b3d7e",
+      "name": "Google Search"
+    },
+    {
+      "parameters": {
+        "content": "Calender Tool\n",
+        "height": 224,
+        "width": 944,
+        "color": "#1C631D"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        0,
+        384
+      ],
+      "typeVersion": 1,
+      "id": "81f5054b-8b4f-48ec-83c7-34091dbceb62",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "Email Tool",
+        "height": 240,
+        "width": 576,
+        "color": "#235DA9"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1104,
+        512
+      ],
+      "typeVersion": 1,
+      "id": "4a2a82d0-eebb-4943-809b-fcd87dc16112",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.toolCalculator",
+      "typeVersion": 1,
+      "position": [
+        -320,
+        752
+      ],
+      "id": "e9b9242d-c394-45db-824f-75c46531f181",
+      "name": "Calculator"
+    },
+    {
+      "parameters": {
+        "content": "Expense Tool",
+        "height": 224,
+        "width": 448,
+        "color": "#B74E63"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -368,
+        672
+      ],
+      "typeVersion": 1,
+      "id": "aa25e6e8-8e8f-4260-890b-9761179a0cb5",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1PeF-WhPedsv5KH_5vXKLYL-JhgG0lxZbcHJ75u2-8Ac",
+          "mode": "list",
+          "cachedResultName": "Finance_Tracking_Sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1PeF-WhPedsv5KH_5vXKLYL-JhgG0lxZbcHJ75u2-8Ac/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1PeF-WhPedsv5KH_5vXKLYL-JhgG0lxZbcHJ75u2-8Ac/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        -32,
+        752
+      ],
+      "id": "3c1a86c7-d03c-4686-96a6-88009ecfd766",
+      "name": "Get_Expense"
+    },
+    {
+      "parameters": {
+        "folderId": "default",
+        "title": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Title', ``, 'string') }}"
+      },
+      "type": "n8n-nodes-base.googleDocsTool",
+      "typeVersion": 2,
+      "position": [
+        256,
+        736
+      ],
+      "id": "0d5a1ce1-e458-41ef-ba26-e3a1ac1a6c37",
+      "name": "Create_Notes_File"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentURL": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Doc_ID_or_URL', ``, 'string') }}",
+        "simple": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Simplify', ``, 'boolean') }}",
+        "actionsUi": {
+          "actionFields": [
+            {
+              "action": "insert",
+              "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('actionFields0_Old_Text', ``, 'string') }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.googleDocsTool",
+      "typeVersion": 2,
+      "position": [
+        416,
+        736
+      ],
+      "id": "d205fa40-c202-46dd-a8f9-27baa194c7d4",
+      "name": "Update_Note_File"
+    },
+    {
+      "parameters": {
+        "content": "Notes Tool",
+        "height": 224,
+        "width": 560,
+        "color": "#756F2F"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        176,
+        688
+      ],
+      "typeVersion": 1,
+      "id": "d6ecdb31-a3b6-4b2c-aa46-c1607f784bc5",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "content": "Task Tool",
+        "height": 224,
+        "width": 736,
+        "color": "#7B4582"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -832,
+        1008
+      ],
+      "typeVersion": 1,
+      "id": "d9514a25-65f6-4fd1-9204-0d4142b6bf1e",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "task": "MDc4Mjk4MzE1ODg3Mjk5NzMxNDY6MDow",
+        "taskId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Task_ID', ``, 'string') }}"
+      },
+      "type": "n8n-nodes-base.googleTasksTool",
+      "typeVersion": 1,
+      "position": [
+        -640,
+        1088
+      ],
+      "id": "ea6968a9-5861-4d1a-b303-ccff9b0c6c96",
+      "name": "Get_Single_Task"
+    },
+    {
+      "parameters": {
+        "task": "MDc4Mjk4MzE1ODg3Mjk5NzMxNDY6MDow",
+        "title": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Title', ``, 'string') }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.googleTasksTool",
+      "typeVersion": 1,
+      "position": [
+        -784,
+        1088
+      ],
+      "id": "97a23e34-63e4-4ca7-8e7d-dc1478216445",
+      "name": "Create_Tasks"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "task": "MDc4Mjk4MzE1ODg3Mjk5NzMxNDY6MDow",
+        "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.googleTasksTool",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        1088
+      ],
+      "id": "a29cdb63-8d30-4b83-bf1d-4fdabdda355a",
+      "name": "Get_Multiple_Task"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "task": "MDc4Mjk4MzE1ODg3Mjk5NzMxNDY6MDow",
+        "taskId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Task_ID', ``, 'string') }}",
+        "updateFields": {}
+      },
+      "type": "n8n-nodes-base.googleTasksTool",
+      "typeVersion": 1,
+      "position": [
+        -336,
+        1088
+      ],
+      "id": "f0a22867-f1ec-40ab-a724-8fe9f225cf64",
+      "name": "Update_Tasks"
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "task": "MDc4Mjk4MzE1ODg3Mjk5NzMxNDY6MDow",
+        "taskId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Task_ID', ``, 'string') }}"
+      },
+      "type": "n8n-nodes-base.googleTasksTool",
+      "typeVersion": 1,
+      "position": [
+        -208,
+        1088
+      ],
+      "id": "139019c9-237d-40fd-a25d-3368f01b5f99",
+      "name": "Delete_Tasks"
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "harshilpatel1876@gmail.com",
+          "mode": "list",
+          "cachedResultName": "harshilpatel1876@gmail.com"
+        },
+        "start": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Start', ``, 'string') }}",
+        "end": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('End', ``, 'string') }}",
+        "useDefaultReminders": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Use_Default_Reminders', ``, 'boolean') }}",
+        "additionalFields": {
+          "description": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Description', ``, 'string') }}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        64,
+        448
+      ],
+      "id": "1c532f8d-3b23-4cbe-97fd-f4af333a5fde",
+      "name": "Create_Calender_Event"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "calendar": {
+          "__rl": true,
+          "value": "harshilpatel1876@gmail.com",
+          "mode": "list",
+          "cachedResultName": "harshilpatel1876@gmail.com"
+        },
+        "eventId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Event_ID', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        256,
+        448
+      ],
+      "id": "cf3e27d8-fd84-4957-9690-63133bac1247",
+      "name": "Get_Single_Calender_Event"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "harshilpatel1876@gmail.com",
+          "mode": "list",
+          "cachedResultName": "harshilpatel1876@gmail.com"
+        },
+        "limit": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Limit', ``, 'number') }}",
+        "timeMin": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('After', ``, 'string') }}",
+        "timeMax": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Before', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        432,
+        448
+      ],
+      "id": "0b33235f-9678-451a-a95b-c5d4f2fd1b45",
+      "name": "Get_Calender_Events"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "messageId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message_ID', ``, 'string') }}",
+        "simple": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Simplify', ``, 'boolean') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.2,
+      "position": [
+        -1040,
+        576
+      ],
+      "id": "82d9b517-84ad-40f7-9e15-b091fd562202",
+      "name": "Get_Single_Email",
+      "webhookId": "92bb7904-4ab7-4181-a0d8-a024ed9359f9"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}",
+        "filters": {}
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.2,
+      "position": [
+        -864,
+        576
+      ],
+      "id": "0e2d6505-f2dc-4cd7-b745-b7351e9a7f25",
+      "name": "Get_Messages_Email",
+      "webhookId": "fd54d760-47e8-4e58-a7f2-240c0866bb42"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('To', ``, 'string') }}",
+        "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', ``, 'string') }}",
+        "emailType": "text",
+        "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', ``, 'string') }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.2,
+      "position": [
+        -672,
+        576
+      ],
+      "id": "63d86749-f727-443b-905a-4bfc8a9b1d33",
+      "name": "Send_Messages_Email",
+      "webhookId": "c858f630-8492-4d8f-a9fc-cbc1fdb2293b"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1PeF-WhPedsv5KH_5vXKLYL-JhgG0lxZbcHJ75u2-8Ac",
+          "mode": "list",
+          "cachedResultName": "Finance_Tracking_Sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1PeF-WhPedsv5KH_5vXKLYL-JhgG0lxZbcHJ75u2-8Ac/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1PeF-WhPedsv5KH_5vXKLYL-JhgG0lxZbcHJ75u2-8Ac/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ID": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('ID', ``, 'string') }}",
+            "Date": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Date', ``, 'string') }}",
+            "Expense_Category": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Expense_Category', ``, 'string') }}",
+            "Expense": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Expense', ``, 'string') }}",
+            "Remark": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Remark', ``, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Expense_Category",
+              "displayName": "Expense_Category",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Expense",
+              "displayName": "Expense",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Remark",
+              "displayName": "Remark",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        -176,
+        752
+      ],
+      "id": "ce841b1d-a3eb-4750-9f53-71e6fe147a70",
+      "name": "Add_Expenses"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "documentURL": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Doc_ID_or_URL', ``, 'string') }}",
+        "simple": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Simplify', ``, 'boolean') }}"
+      },
+      "type": "n8n-nodes-base.googleDocsTool",
+      "typeVersion": 2,
+      "position": [
+        592,
+        736
+      ],
+      "id": "12999946-c8ae-41b1-a5dc-2c728c23b8a7",
+      "name": "Get_Notes_File"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "calendar": {
+          "__rl": true,
+          "value": "harshilpatel1876@gmail.com",
+          "mode": "list",
+          "cachedResultName": "harshilpatel1876@gmail.com"
+        },
+        "eventId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Event_ID', ``, 'string') }}",
+        "updateFields": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        624,
+        448
+      ],
+      "id": "7acc8a51-b5ff-4a22-a698-bc465ee05b66",
+      "name": "Update_Calender_Event"
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "calendar": {
+          "__rl": true,
+          "value": "harshilpatel1876@gmail.com",
+          "mode": "list",
+          "cachedResultName": "harshilpatel1876@gmail.com"
+        },
+        "eventId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Event_ID', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        816,
+        448
+      ],
+      "id": "13804146-a2a6-4ed7-9b32-9a7244ed5f53",
+      "name": "Delete_Calender_Events"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Slack Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Search": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculator": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get_Expense": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create_Notes_File": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update_Note_File": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get_Single_Task": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create_Tasks": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get_Multiple_Task": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update_Tasks": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete_Tasks": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create_Calender_Event": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get_Single_Calender_Event": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get_Calender_Events": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get_Single_Email": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get_Messages_Email": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send_Messages_Email": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add_Expenses": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get_Notes_File": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update_Calender_Event": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete_Calender_Events": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "timezone": "Asia/Kolkata",
+    "callerPolicy": "workflowsFromSameOwner",
+    "executionTimeout": -1
+  },
+  "versionId": "bbc60c04-4729-4b84-a315-d4b7c8caf5cb",
+  "nodeGroups": [],
+  "tags": []
+}
