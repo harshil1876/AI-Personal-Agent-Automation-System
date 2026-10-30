@@ -1,0 +1,194 @@
+{
+  "name": "Personal Agent V2 - Email Sub-workflow",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1,
+      "position": [
+        -760,
+        0
+      ],
+      "id": "Personal Agent V2 - Email Sub-workflow-trigger",
+      "name": "Execute Workflow Trigger"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.userMessage || $json.text || $json.query || JSON.stringify($json) }}",
+        "options": {
+          "systemMessage": "Handle Gmail requests only. Search and summarize messages accurately. Before sending, verify recipients, subject, and body and require confirmation for external side effects. Never claim an email was sent without a successful tool result.\n\nInput contract: the parent workflow should provide userMessage, sessionId, runtime_now, and timezone. Preserve these fields when returning output."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -240,
+        0
+      ],
+      "id": "Personal Agent V2 - Email Sub-workflow-agent",
+      "name": "Domain AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        -240,
+        220
+      ],
+      "id": "Personal Agent V2 - Email Sub-workflow-model",
+      "name": "Google Gemini Chat Model"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.sessionId || \"domain-default\" }}",
+        "tableName": "n8n_chat_histories",
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        220
+      ],
+      "id": "Personal Agent V2 - Email Sub-workflow-memory",
+      "name": "Postgres Chat Memory"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "messageId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message_ID', ``, 'string') }}",
+        "simple": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Simplify', ``, 'boolean') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.2,
+      "position": [
+        220,
+        160
+      ],
+      "id": "Personal Agent V2 - Email Sub-workflow-Get_Single_Email",
+      "name": "Get_Single_Email",
+      "webhookId": "92bb7904-4ab7-4181-a0d8-a024ed9359f9"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}",
+        "filters": {}
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.2,
+      "position": [
+        480,
+        160
+      ],
+      "id": "Personal Agent V2 - Email Sub-workflow-Get_Messages_Email",
+      "name": "Get_Messages_Email",
+      "webhookId": "fd54d760-47e8-4e58-a7f2-240c0866bb42"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('To', ``, 'string') }}",
+        "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', ``, 'string') }}",
+        "emailType": "text",
+        "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', ``, 'string') }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.2,
+      "position": [
+        220,
+        380
+      ],
+      "id": "Personal Agent V2 - Email Sub-workflow-Send_Messages_Email",
+      "name": "Send_Messages_Email",
+      "webhookId": "c858f630-8492-4d8f-a9fc-cbc1fdb2293b"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Execute Workflow Trigger": {
+      "main": [
+        [
+          {
+            "node": "Domain AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Domain AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Domain AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get_Single_Email": {
+      "ai_tool": [
+        [
+          {
+            "node": "Domain AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get_Messages_Email": {
+      "ai_tool": [
+        [
+          {
+            "node": "Domain AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send_Messages_Email": {
+      "ai_tool": [
+        [
+          {
+            "node": "Domain AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Kolkata"
+  },
+  "versionId": "Personal Agent V2 - Email Sub-workflow-template",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": []
+}

@@ -1,0 +1,245 @@
+{
+  "name": "Personal Agent V2 - Expense Sub-workflow",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1,
+      "position": [
+        -760,
+        0
+      ],
+      "id": "Personal Agent V2 - Expense Sub-workflow-trigger",
+      "name": "Execute Workflow Trigger"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.userMessage || $json.text || $json.query || JSON.stringify($json) }}",
+        "options": {
+          "systemMessage": "Handle expense tracking only. Extract amount, category, date, and remark without guessing. Retrieve the matching row before updates. Use exact row IDs for changes and ask for clarification when multiple rows match. Never claim success without a successful Sheets result.\n\nInput contract: the parent workflow should provide userMessage, sessionId, runtime_now, and timezone. Preserve these fields when returning output."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -240,
+        0
+      ],
+      "id": "Personal Agent V2 - Expense Sub-workflow-agent",
+      "name": "Domain AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        -240,
+        220
+      ],
+      "id": "Personal Agent V2 - Expense Sub-workflow-model",
+      "name": "Google Gemini Chat Model"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.sessionId || \"domain-default\" }}",
+        "tableName": "n8n_chat_histories",
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        220
+      ],
+      "id": "Personal Agent V2 - Expense Sub-workflow-memory",
+      "name": "Postgres Chat Memory"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1PeF-WhPedsv5KH_5vXKLYL-JhgG0lxZbcHJ75u2-8Ac",
+          "mode": "list",
+          "cachedResultName": "Finance_Tracking_Sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1PeF-WhPedsv5KH_5vXKLYL-JhgG0lxZbcHJ75u2-8Ac/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1PeF-WhPedsv5KH_5vXKLYL-JhgG0lxZbcHJ75u2-8Ac/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        220,
+        160
+      ],
+      "id": "Personal Agent V2 - Expense Sub-workflow-Get_Expense",
+      "name": "Get_Expense"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1PeF-WhPedsv5KH_5vXKLYL-JhgG0lxZbcHJ75u2-8Ac",
+          "mode": "list",
+          "cachedResultName": "Finance_Tracking_Sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1PeF-WhPedsv5KH_5vXKLYL-JhgG0lxZbcHJ75u2-8Ac/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1PeF-WhPedsv5KH_5vXKLYL-JhgG0lxZbcHJ75u2-8Ac/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ID": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('ID', ``, 'string') }}",
+            "Date": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Date', ``, 'string') }}",
+            "Expense_Category": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Expense_Category', ``, 'string') }}",
+            "Expense": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Expense', ``, 'string') }}",
+            "Remark": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Remark', ``, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Expense_Category",
+              "displayName": "Expense_Category",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Expense",
+              "displayName": "Expense",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Remark",
+              "displayName": "Remark",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        480,
+        160
+      ],
+      "id": "Personal Agent V2 - Expense Sub-workflow-Add_Expenses",
+      "name": "Add_Expenses"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Execute Workflow Trigger": {
+      "main": [
+        [
+          {
+            "node": "Domain AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Domain AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Domain AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get_Expense": {
+      "ai_tool": [
+        [
+          {
+            "node": "Domain AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add_Expenses": {
+      "ai_tool": [
+        [
+          {
+            "node": "Domain AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Kolkata"
+  },
+  "versionId": "Personal Agent V2 - Expense Sub-workflow-template",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": []
+}

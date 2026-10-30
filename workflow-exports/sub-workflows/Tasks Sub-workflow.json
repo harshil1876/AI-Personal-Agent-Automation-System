@@ -1,0 +1,240 @@
+{
+  "name": "Personal Agent V2 - Tasks Sub-workflow",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1,
+      "position": [
+        -760,
+        0
+      ],
+      "id": "Personal Agent V2 - Tasks Sub-workflow-trigger",
+      "name": "Execute Workflow Trigger"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.userMessage || $json.text || $json.query || JSON.stringify($json) }}",
+        "options": {
+          "systemMessage": "Handle task-management requests only. Create, list, update, and delete tasks. Ask for clarification when the task or due date is ambiguous. Confirm deletions before acting and never claim success without a successful tool result.\n\nInput contract: the parent workflow should provide userMessage, sessionId, runtime_now, and timezone. Preserve these fields when returning output."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -240,
+        0
+      ],
+      "id": "Personal Agent V2 - Tasks Sub-workflow-agent",
+      "name": "Domain AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        -240,
+        220
+      ],
+      "id": "Personal Agent V2 - Tasks Sub-workflow-model",
+      "name": "Google Gemini Chat Model"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.sessionId || \"domain-default\" }}",
+        "tableName": "n8n_chat_histories",
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        220
+      ],
+      "id": "Personal Agent V2 - Tasks Sub-workflow-memory",
+      "name": "Postgres Chat Memory"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "task": "MDc4Mjk4MzE1ODg3Mjk5NzMxNDY6MDow",
+        "taskId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Task_ID', ``, 'string') }}"
+      },
+      "type": "n8n-nodes-base.googleTasksTool",
+      "typeVersion": 1,
+      "position": [
+        220,
+        160
+      ],
+      "id": "Personal Agent V2 - Tasks Sub-workflow-Get_Single_Task",
+      "name": "Get_Single_Task"
+    },
+    {
+      "parameters": {
+        "task": "MDc4Mjk4MzE1ODg3Mjk5NzMxNDY6MDow",
+        "title": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Title', ``, 'string') }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.googleTasksTool",
+      "typeVersion": 1,
+      "position": [
+        480,
+        160
+      ],
+      "id": "Personal Agent V2 - Tasks Sub-workflow-Create_Tasks",
+      "name": "Create_Tasks"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "task": "MDc4Mjk4MzE1ODg3Mjk5NzMxNDY6MDow",
+        "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.googleTasksTool",
+      "typeVersion": 1,
+      "position": [
+        220,
+        380
+      ],
+      "id": "Personal Agent V2 - Tasks Sub-workflow-Get_Multiple_Task",
+      "name": "Get_Multiple_Task"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "task": "MDc4Mjk4MzE1ODg3Mjk5NzMxNDY6MDow",
+        "taskId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Task_ID', ``, 'string') }}",
+        "updateFields": {}
+      },
+      "type": "n8n-nodes-base.googleTasksTool",
+      "typeVersion": 1,
+      "position": [
+        480,
+        380
+      ],
+      "id": "Personal Agent V2 - Tasks Sub-workflow-Update_Tasks",
+      "name": "Update_Tasks"
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "task": "MDc4Mjk4MzE1ODg3Mjk5NzMxNDY6MDow",
+        "taskId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Task_ID', ``, 'string') }}"
+      },
+      "type": "n8n-nodes-base.googleTasksTool",
+      "typeVersion": 1,
+      "position": [
+        220,
+        600
+      ],
+      "id": "Personal Agent V2 - Tasks Sub-workflow-Delete_Tasks",
+      "name": "Delete_Tasks"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Execute Workflow Trigger": {
+      "main": [
+        [
+          {
+            "node": "Domain AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Domain AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Domain AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get_Single_Task": {
+      "ai_tool": [
+        [
+          {
+            "node": "Domain AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create_Tasks": {
+      "ai_tool": [
+        [
+          {
+            "node": "Domain AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get_Multiple_Task": {
+      "ai_tool": [
+        [
+          {
+            "node": "Domain AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update_Tasks": {
+      "ai_tool": [
+        [
+          {
+            "node": "Domain AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete_Tasks": {
+      "ai_tool": [
+        [
+          {
+            "node": "Domain AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Kolkata"
+  },
+  "versionId": "Personal Agent V2 - Tasks Sub-workflow-template",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": []
+}
