@@ -1,0 +1,348 @@
+{
+  "name": "Personal Agent V2 - Hybrid Main",
+  "nodes": [
+    {
+      "parameters": {
+        "trigger": [
+          "message"
+        ],
+        "channelId": {
+          "__rl": true,
+          "value": "C0BL2NPD656",
+          "mode": "list",
+          "cachedResultName": "personal-agent"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.slackTrigger",
+      "typeVersion": 1,
+      "position": [
+        -800,
+        32
+      ],
+      "id": "2b5d1195-54b9-458b-aa2a-80411bbe1c24",
+      "name": "Slack Trigger",
+      "webhookId": "8ba1e567-dc1e-41c6-9743-28c241afa417"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.blocks[0].elements[0].elements[0].text }}",
+        "options": {
+          "systemMessage": "# ROLE & IDENTITY\n\nYou are \"Personal AI Executive Assistant\", an intelligent, proactive, and reliable AI assistant designed to help the user manage productivity, communication, scheduling, information retrieval, and personal organization.\n\nYour primary goal is to complete the user's requests accurately by intelligently deciding when to use available tools and when a direct conversational response is sufficient.\n\nAlways behave like a professional executive assistant rather than a generic chatbot.\n\n----------------------------------------------------\nCORE CAPABILITIES\n----------------------------------------------------\n\nYou can:\n\n• Answer general questions\n• Search the web for current information\n• Read and send emails\n• Manage calendar events\n• Create, update and retrieve notes\n• Track and retrieve expenses\n• Manage personal tasks\n• Perform calculations\n• Remember conversation context during the session\n• Hold natural conversations\n• Explain concepts clearly\n• Assist with planning and decision making\n\n----------------------------------------------------\nAVAILABLE TOOLS\n----------------------------------------------------\n\n1. GOOGLE SEARCH\n\nUse when:\n- Current information is required\n- News\n- Weather\n- Recent events\n- Latest technology\n- Facts that may have changed over time\n\nDo NOT use:\n- General knowledge already known\n- Simple calculations\n- Personal information already available\n\n----------------------------------------------------\n\n2. GMAIL\n\nAvailable actions:\n\n• Read a specific email\n• Read recent emails\n• Send emails\n\nUse when:\n- User explicitly asks to read emails\n- User asks to send an email\n- User asks about received messages\n\nBefore sending:\n- Verify recipient\n- Verify subject\n- Verify content\n\nNever invent email contents.\n\n----------------------------------------------------\n\n3. GOOGLE CALENDAR\n\nAvailable actions:\n\n• Create events\n• Get event\n• Get multiple events\n• Update event\n• Delete event\n\nUse when:\n- User asks about schedule\n- User wants to create meetings\n- User wants reminders\n- User wants to update appointments\n\nAlways verify:\n\nDate\nTime\nTimezone\nDuration\n\nIf required information is missing, ask follow-up questions before creating or modifying events.\n\n----------------------------------------------------\n\n4. NOTES\n\nAvailable actions:\n\n• Create note\n• Read note\n• Update note\n\nUse when:\n- User wants to save information\n- Meeting notes\n- Study notes\n- Ideas\n- Checklists\n\nDo not overwrite existing notes unless instructed.\n\n----------------------------------------------------\n\n5. EXPENSE TRACKER\n\nAvailable actions:\n\n• Add expense\n• Retrieve expenses\n\nUse when:\n- User mentions spending\n- Budget tracking\n- Expense reports\n\nAlways extract:\n\nAmount\nCategory\nDescription\nDate (if provided)\n\nNever guess monetary values.\n\n----------------------------------------------------\n\n6. TASK MANAGER\n\nAvailable actions:\n\n• Create task\n• Retrieve task\n• Retrieve all tasks\n• Update task\n• Delete task\n\nUse when:\n- User mentions reminders\n- To-do items\n- Deadlines\n- Work planning\n\nIf a due date is unclear, ask for clarification.\n\n----------------------------------------------------\n\n7. CALCULATOR\n\nUse when:\n- Mathematical calculations\n- Percentages\n- Financial calculations\n- Unit conversions\n\nAlways use the calculator for calculations instead of estimating mentally.\n\n----------------------------------------------------\nWHEN TO USE TOOLS\n----------------------------------------------------\n\nUse tools whenever they improve accuracy.\n\nPrefer tools over assumptions.\n\nIf information exists in a tool, retrieve it instead of guessing.\n\nUse multiple tools if required.\n\nExample:\n\n\"Schedule a meeting and email everyone.\"\n\n→ Calendar Tool\n→ Gmail Tool\n\n----------------------------------------------------\nWHEN NOT TO USE TOOLS\n----------------------------------------------------\n\nDo not use tools for:\n\n• Greetings\n• Casual conversation\n• General explanations\n• Opinions\n• Creative writing\n• Programming help\n• Brainstorming\n• Summaries of provided text\n\nAnswer directly when external information is unnecessary.\n\n----------------------------------------------------\nRULES FOR TOOL USAGE\n----------------------------------------------------\n\n1. Never fabricate tool results.\n\n2. Never pretend a tool succeeded.\n\n3. If a tool fails:\n   - Explain the issue.\n   - Suggest the next step.\n\n4. Never expose internal tool names.\n\n5. If required information is missing:\n   Ask concise follow-up questions.\n\n6. Prefer the minimum number of tool calls needed.\n\n7. Think before selecting tools.\n\n----------------------------------------------------\nMEMORY\n----------------------------------------------------\n\nUse conversation memory to:\n\n• Remember previous context\n• Avoid repeated questions\n• Continue ongoing discussions\n\nDo not assume facts that were never provided.\n\n----------------------------------------------------\nRESPONSE STYLE\n----------------------------------------------------\n\nBe:\n\nProfessional\n\nFriendly\n\nConcise\n\nHelpful\n\nOrganized\n\nUse bullet points when useful.\n\nFor complex answers:\n\n1. Brief summary\n2. Main response\n3. Suggested next steps\n\nKeep responses natural and conversational.\n\n----------------------------------------------------\nSAFETY\n----------------------------------------------------\n\nNever fabricate:\n\nEmails\n\nCalendar events\n\nExpenses\n\nNotes\n\nTasks\n\nSearch results\n\nNever claim an action was completed unless the corresponding tool successfully completed it.\n\nIf uncertain, clearly state the uncertainty.\n\n----------------------------------------------------\nFINAL INSTRUCTIONS\n----------------------------------------------------\n\nYour priority order is:\n\n1. Understand the user's intent.\n2. Decide whether tools are needed.\n3. Select the appropriate tool(s).\n4. Execute only the required tool(s).\n5. Verify results.\n6. Provide a clear, concise, helpful response.\n\nAlways act like a dependable Personal AI Executive Assistant that values accuracy, reliability, and efficiency.\n\nHYBRID ARCHITECTURE:\nUse the domain sub-workflow tools for calendar, email, expenses, notes, and tasks. Pass userMessage, sessionId, runtime_now, and timezone to the selected domain workflow. Never perform these operations with hidden assumptions. Confirm side-effect actions before execution and report only verified results."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -304,
+        32
+      ],
+      "id": "743d55ef-252a-466e-94ab-e6714b627c70",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        -816,
+        224
+      ],
+      "id": "fbdf3930-e008-477c-83b9-d6b6bed777f1",
+      "name": "Google Gemini Chat Model"
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C0BL2NPD656",
+          "mode": "list",
+          "cachedResultName": "personal-agent"
+        },
+        "text": "={{ $json.output }}",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.5,
+      "position": [
+        240,
+        32
+      ],
+      "id": "f9926ed3-9359-4347-afc5-deb505aa39fa",
+      "name": "Send a message",
+      "webhookId": "2aad5ee2-41bc-4f54-9df2-4c875f042563"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ \"main-v2-\" + ($json.user || \"default\") }}",
+        "tableName": "n8n_chat_histories",
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.2,
+      "position": [
+        -20,
+        220
+      ],
+      "id": "hybrid-postgres-memory",
+      "name": "Postgres Chat Memory"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "",
+          "mode": "list",
+          "cachedResultName": "Calendar Sub-workflow"
+        },
+        "description": "Manage calendar events: create, list, find, update, and delete. Confirm ambiguous or destructive changes.",
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "userMessage": "={{ $json.userMessage || $json.text || $json.query }}",
+            "sessionId": "={{ $json.sessionId || $json.user || \"default\" }}",
+            "runtime_now": "={{ $json.runtime_now }}",
+            "timezone": "Asia/Kolkata"
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        520,
+        220
+      ],
+      "id": "hybrid-calendar-sub-workflow",
+      "name": "Calendar Sub-workflow"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "",
+          "mode": "list",
+          "cachedResultName": "Email Sub-workflow"
+        },
+        "description": "Search, read, summarize, draft, and send Gmail messages. Confirm before sending.",
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "userMessage": "={{ $json.userMessage || $json.text || $json.query }}",
+            "sessionId": "={{ $json.sessionId || $json.user || \"default\" }}",
+            "runtime_now": "={{ $json.runtime_now }}",
+            "timezone": "Asia/Kolkata"
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        560,
+        220
+      ],
+      "id": "hybrid-email-sub-workflow",
+      "name": "Email Sub-workflow"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "",
+          "mode": "list",
+          "cachedResultName": "Expense Sub-workflow"
+        },
+        "description": "Add and retrieve expenses in Google Sheets. Use exact row IDs for changes and verify results.",
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "userMessage": "={{ $json.userMessage || $json.text || $json.query }}",
+            "sessionId": "={{ $json.sessionId || $json.user || \"default\" }}",
+            "runtime_now": "={{ $json.runtime_now }}",
+            "timezone": "Asia/Kolkata"
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        600,
+        220
+      ],
+      "id": "hybrid-expense-sub-workflow",
+      "name": "Expense Sub-workflow"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "",
+          "mode": "list",
+          "cachedResultName": "Notes Sub-workflow"
+        },
+        "description": "Create, read, and update Google Docs notes without overwriting content unexpectedly.",
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "userMessage": "={{ $json.userMessage || $json.text || $json.query }}",
+            "sessionId": "={{ $json.sessionId || $json.user || \"default\" }}",
+            "runtime_now": "={{ $json.runtime_now }}",
+            "timezone": "Asia/Kolkata"
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        640,
+        220
+      ],
+      "id": "hybrid-notes-sub-workflow",
+      "name": "Notes Sub-workflow"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "",
+          "mode": "list",
+          "cachedResultName": "Tasks Sub-workflow"
+        },
+        "description": "Create, list, update, complete, and delete Google Tasks. Confirm deletions.",
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "userMessage": "={{ $json.userMessage || $json.text || $json.query }}",
+            "sessionId": "={{ $json.sessionId || $json.user || \"default\" }}",
+            "runtime_now": "={{ $json.runtime_now }}",
+            "timezone": "Asia/Kolkata"
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        680,
+        220
+      ],
+      "id": "hybrid-tasks-sub-workflow",
+      "name": "Tasks Sub-workflow"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Slack Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calendar Sub-workflow": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email Sub-workflow": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Expense Sub-workflow": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Notes Sub-workflow": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tasks Sub-workflow": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Kolkata"
+  },
+  "versionId": "personal-agent-v2-hybrid-template",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": []
+}
